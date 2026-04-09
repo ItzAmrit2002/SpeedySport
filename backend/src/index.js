@@ -2,6 +2,7 @@ import express from "express";
 import matchesRouter from "./routes/matches.js";
 import http from 'http'
 import { attachWebSocketServer } from "./socket/server.js";
+import { securityMiddleware } from "./arcjet.js";
 const app = express();
 const server = http.createServer(app);
 app.use(express.json());
@@ -9,6 +10,8 @@ app.use(express.json());
 app.get("/", (_req, res) => {
   res.json({ message: "SpeedySport API is running." });
 });
+
+app.use(securityMiddleware())
 app.use("/matches", matchesRouter);
 
 const {broadcastMatchCreated} = attachWebSocketServer(server);
