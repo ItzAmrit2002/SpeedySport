@@ -31,8 +31,9 @@ export function attachWebSocketServer(server) {
                     return
                 }
             } catch (error) {
-                console.error('WS connection error', e)
-                socket.close(code, reaosn)
+                console.error('WS connection error:', error)
+                socket.close(1011, 'Internal error')
+                return
             }
         }
 
