@@ -39,9 +39,13 @@ matchRouter.post("/", async(req, res) => {
         status: getMatchStatus(parsed.data.startTime, parsed.data.endTime),
     }).returning();
 
-    if(res.app.locals.broadcastMatchCreated){
-      res.app.locals.broadcastMatchCreated(match);
-    }
+       if (typeof res.app.locals.broadcastMatchCreated === "function") {
+             try {
+                res.app.locals.broadcastMatchCreated(match);
+              } catch (broadcastError) {
+                console.error("POST /matches broadcast failed:", broadcastError);
+              }
+            }
     res.status(201).json({data: match});
     } catch (error) {
         console.error("POST /matches failed:", error);
