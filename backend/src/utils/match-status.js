@@ -1,18 +1,24 @@
 import { MATCH_STATUS } from '../validation/matches.js';
 
 export function getMatchStatus(startTime, endTime, now = new Date()) {
-    const start = new Date(startTime);
-    const end = new Date(endTime);
-
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    if (startTime == null) {
         return null;
     }
+
+    const start = new Date(startTime);
+    if (Number.isNaN(start.getTime())) {
+        return null;
+    }
+
+    // End time is optional; if missing, the match can't be finished.
+    const end = endTime == null ? null : new Date(endTime);
+    if (end && Number.isNaN(end.getTime())) return null;
 
     if (now < start) {
         return MATCH_STATUS.SCHEDULED;
     }
 
-    if (now >= end) {
+    if (end && now >= end) {
         return MATCH_STATUS.FINISHED;
     }
 

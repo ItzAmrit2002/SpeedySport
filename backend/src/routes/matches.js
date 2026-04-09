@@ -19,7 +19,8 @@ matchRouter.get("/", async(req, res) => {
     const data = await db.select().from(matches).orderBy((desc(matches.createdAt))).limit(limit);
     res.status(200).json({data});
   } catch (error) {
-    res.status(500).json({ error: error.message, details: JSON.stringify(error) });
+    console.error("GET /matches failed:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -39,7 +40,8 @@ matchRouter.post("/", async(req, res) => {
     }).returning();
     res.status(201).json({data: match});
     } catch (error) {
-      res.status(500).json({ error: error.message, details: JSON.stringify(error) });
+        console.error("POST /matches failed:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
   },
 );
