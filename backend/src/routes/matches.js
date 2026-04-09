@@ -38,6 +38,10 @@ matchRouter.post("/", async(req, res) => {
         awayScore: parsed.data.awayScore ?? 0,
         status: getMatchStatus(parsed.data.startTime, parsed.data.endTime),
     }).returning();
+
+    if(res.app.locals.broadcastMatchCreated){
+      res.app.locals.broadcastMatchCreated(match);
+    }
     res.status(201).json({data: match});
     } catch (error) {
         console.error("POST /matches failed:", error);
